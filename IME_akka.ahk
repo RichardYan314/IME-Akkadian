@@ -1,3 +1,16 @@
+On := true
+
+^Numpad0::
+if On {
+    MsgBox "off"
+    On := false
+} else {
+    MsgBox "on"
+    On := true
+}
+return
+
+#IF On
 #Hotstring O ? *
 ::a1::ā
 ::a2::â
