@@ -1,5 +1,18 @@
 On := true
 
+GetKeyboardLanguage() {
+    if !ThreadId := DllCall("user32.dll\GetWindowThreadProcessId", "Ptr", WinActive("A"), "UInt", 0, "UInt")
+        Error := "GetWindowThreadProcessId Failed"
+    else if !KBLayout := DllCall("user32.dll\GetKeyboardLayout", "UInt", ThreadId, "UInt")
+        Error := "GetKeyboardLayout Failed"
+        
+    if Error
+        MsgBox, % Error
+    else
+        ; MsgBox, % Format("Lang. 0x{:04X}, Prim. 0x{:04X}, Sub. 0x{:02X}", KBLayout & 0xFFFF, KBLayout & 0x03FF, (KBLayout & 0xFC00) >> 10)
+        return KBLayout & 0xFFFF
+}
+
 ^Numpad0::
 if On {
     MsgBox "off"
@@ -10,7 +23,7 @@ if On {
 }
 return
 
-#IF On
+#IF On && (GetKeyboardLanguage() == 0x0409)
 #Hotstring O ? *
 ::a1::ā
 ::a2::â
